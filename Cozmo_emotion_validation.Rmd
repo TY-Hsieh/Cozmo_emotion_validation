@@ -1,0 +1,33 @@
+---
+title: "Cozmo emotion validation"
+author: "Te-Yi Hsieh"
+date: "02/03/2020"
+output: html_document
+---
+
+
+###Setting Up
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options("scipen"=10, "digits"=4)
+```
+
+###Loading in library
+```{r library}
+library(tidyverse)
+```
+
+###Loading in datasets
+```{r datasets}
+csv_files = list.files(pattern = "Result", full.names = TRUE)
+csv_list = lapply(csv_files, read_csv)
+Raw_data = do.call(rbind, csv_list)
+```
+
+###Remove NA and testing responses
+```{r tidy datasets}
+r_data <- Raw_data %>% filter(str_detect(feedback, "monkey") | str_detect(age, "monkey"))
+Data <- anti_join(Raw_data, r_data, by = "session") %>% drop_na(6:17)
+```
+
