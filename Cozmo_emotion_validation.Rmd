@@ -18,16 +18,50 @@ options("scipen"=10, "digits"=4)
 library(tidyverse)
 ```
 
-###Loading in datasets
+###Loading in and tidy up datasets
 ```{r datasets}
+#combine four .csv files
 csv_files = list.files(pattern = "Result", full.names = TRUE)
 csv_list = lapply(csv_files, read_csv)
 Raw_data = do.call(rbind, csv_list)
-```
 
-###Remove NA and testing responses
-```{r tidy datasets}
+#remove testing responses and whole-row NA
 r_data <- Raw_data %>% filter(str_detect(feedback, "monkey") | str_detect(age, "monkey"))
 Data <- anti_join(Raw_data, r_data, by = "session") %>% drop_na(6:17)
+```
+
+
+###Participants' Demographics
+
+The mean age for 64 participants is 27.6 years old. fourty three of them are female, 20 of them are male and one is gender variant.
+
+```{r demographics}
+#Age
+age <- Data %>% summarise(age = mean(as.numeric(age), na.rm = TRUE))
+age 
+
+#Gender (gender options include: 1-female, 2-male, 3-Transgender female, 4-Transgender male, 5-Gender variant/ Non-conforming, 6-Prefer not to say)
+gender <- Data %>% count(gender)
+gender
+```
+
+
+##Accuracy rate of recognising Cozmo's emotions
+
+The emotion validation involves: 4 neutral, 3 happy, 3 sad, and 3 angry animations. Participants were asked to answer the emotion category and intensity they saw in each animation clip. The emotion category responses involes:
+1. neutral
+2. happy
+3. sad
+4. angry
+5. other (can specify in text)
+6. I don't know
+
+###Neutral animation
+
+There are four different neutral emotion animations used in the experiment.
+```{r neutral}
+#neutral animation (no.68)
+neutral68 <- Data %>% count(Neutral68_type)
+neutral68
 ```
 
