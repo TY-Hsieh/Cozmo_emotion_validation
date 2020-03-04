@@ -28,6 +28,22 @@ Raw_data = do.call(rbind, csv_list)
 #remove testing responses and whole-row NA
 r_data <- Raw_data %>% filter(str_detect(feedback, "monkey") | str_detect(age, "monkey"))
 Data <- anti_join(Raw_data, r_data, by = "session") %>% drop_na(6:17)
+
+#sub-dataset: emotion category
+dat_cat_num <- Data[ , 6:18] 
+
+dat_cat <- dat_cat_num %>% gather("video", "reponse_num") %>%
+  mutate(id = rep(c(1:64), 13), 
+         response = case_when(reponse_num == 1 ~ "neutral",
+            reponse_num == 2 ~ "happy",
+            reponse_num == 3 ~ "sad",
+            reponse_num == 4 ~ "angry",
+            reponse_num == 5 ~ "other",
+            reponse_num == 6 ~ "don't know")) 
+
+#sub-dataset:emotion intensity
+dat_int <- Data[ , 20:59] 
+dat_int <- dat_int[ , -14]
 ```
 
 
@@ -60,8 +76,126 @@ The emotion validation involves: 4 neutral, 3 happy, 3 sad, and 3 angry animatio
 
 There are four different neutral emotion animations used in the experiment.
 ```{r neutral}
+#subsetting "Neutral" dataset
+neurtal <- dat_cat[1:256, ]
+
 #neutral animation (no.68)
-neutral68 <- Data %>% count(Neutral68_type)
+neutral68 <- neurtal %>% subset(video == "Neutral68_type") %>% 
+  count(response) %>% 
+  mutate(resp_rate = n/64*100) %>%
+  arrange(desc(resp_rate))
 neutral68
+
+#neutral animation (no.91)
+neutral91 <- neurtal %>% subset(video == "Neutral91_type") %>% 
+  count(response) %>% 
+  mutate(resp_rate = n/64*100) %>%
+  arrange(desc(resp_rate))
+neutral91
+
+#neutral animation (no.158)
+neutral158 <- neurtal %>% subset(video == "Neutral158_type") %>% 
+  count(response) %>% 
+  mutate(resp_rate = n/64*100) %>%
+  arrange(desc(resp_rate))
+neutral158
+
+#neutral animation (no.169)
+neutral169 <- neurtal %>% subset(video == "Neutral169_type") %>% 
+  count(response) %>% 
+  mutate(resp_rate = n/64*100) %>%
+  arrange(desc(resp_rate))
+neutral169
 ```
+
+
+###Angry animation
+
+There are three different angry emotion animations used in the experiment.
+```{r angry}
+#subsetting "angry" dataset
+angry <- dat_cat[257:448, ]
+
+#angry animation (no.84)
+angry84 <- angry %>% subset(video == "Angry84_type") %>% 
+  count(response) %>% 
+  mutate(resp_rate = n/64*100) %>%
+  arrange(desc(resp_rate))
+angry84
+
+#angry animation (no.55)
+angry55 <- angry %>%  subset(video == "Angry55_type") %>% 
+  count(response) %>% 
+  mutate(resp_rate = n/64*100) %>%
+  arrange(desc(resp_rate))
+angry55
+
+#angry animation (no.130)
+angry130 <- angry %>%  subset(video == "Angry130_type") %>% 
+  count(response) %>% 
+  mutate(resp_rate = n/64*100) %>%
+  arrange(desc(resp_rate))
+angry130
+```
+
+
+###Happy animation
+
+There are three different happy emotion animations used in the experiment.
+```{r happy}
+#subsetting "happy" dataset
+happy <- dat_cat[449:640, ]
+
+#happy animation (no.103)
+happy103 <- happy %>% subset(video == "Happy103_type") %>% 
+  count(response) %>% 
+  mutate(resp_rate = n/64*100) %>%
+  arrange(desc(resp_rate))
+happy103
+
+#happy animation (no.338)
+happy338 <- happy %>% subset(video == "Happy338_type") %>% 
+  count(response) %>% 
+  mutate(resp_rate = n/64*100) %>%
+  arrange(desc(resp_rate))
+happy338
+
+#happy animation (no.348)
+happy348 <- happy %>% subset(video == "Happy348_type") %>% 
+  count(response) %>% 
+  mutate(resp_rate = n/64*100) %>%
+  arrange(desc(resp_rate))
+happy348
+```
+
+
+###Sad animation
+
+There are three different sad emotion animations used in the experiment.
+```{r sad}
+#subsetting "sad" dataset
+sad <- dat_cat[641:832, ]
+
+#sad animation (no.59)
+sad59 <- sad %>% subset(video == "Sad59_type") %>% 
+  count(response) %>% 
+  mutate(resp_rate = n/64*100) %>%
+  arrange(desc(resp_rate))
+sad59
+
+#sad animation (no.63)
+sad63 <- sad %>% subset(video == "Sad63_type") %>% 
+  count(response) %>% 
+  mutate(resp_rate = n/64*100) %>%
+  arrange(desc(resp_rate))
+sad63
+
+#sad animation (no.134)
+sad134 <- sad %>% subset(video == "Sad134_type") %>% 
+  count(response) %>% 
+  mutate(resp_rate = n/64*100) %>%
+  arrange(desc(resp_rate))
+sad134
+```
+
 
