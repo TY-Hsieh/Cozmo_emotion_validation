@@ -4,7 +4,14 @@ author: "Te-Yi Hsieh"
 date: "02/03/2020"
 output: html_document
 ---
+###Experiment description
+This is a online experiment which aims to validate people's emotional recognistion on Cozmo's emotional animations. Four targeted emotions - neutral, angry, sad, and happy expressions - are selected due to the interest of the second experiment of ECONOBOT project.
 
+Index numbers of these four emotion categories are shown below:
+- Neutral: 69, 91, 158, 169
+- Angry: 55, 84, 130
+- Sad: 59, 63, 134
+- Happy: 103, 338, 348
 
 ###Setting Up
 
@@ -62,7 +69,7 @@ gender
 ```
 
 
-##Accuracy rate of recognising Cozmo's emotions
+##Accurate rate of recognising Cozmo's emotions
 
 The emotion validation involves: 4 neutral, 3 happy, 3 sad, and 3 angry animations. Participants were asked to answer the emotion category and intensity they saw in each animation clip. The emotion category responses involes:
 1. neutral
@@ -198,4 +205,38 @@ sad134 <- sad %>% subset(video == "Sad134_type") %>%
 sad134
 ```
 
+
+
+##Perceived emotional intensity of Cozmo's animations
+
+The intensity analysis will focus on the rating of "correct" responses (e.g. For angry animantion, only the intensity of anger will be analysed)
+
+###The emotional intensity of angry animation
+```{r angry intensity}
+angry_int <- dat_int %>% select(Angry55_intensity_Angry, Angry84_intensity_Angry, Angry130_intensity_Angry) %>%
+  summarise(mAngry55 = mean(Angry55_intensity_Angry, na.rm = TRUE), 
+         mAngry84 = mean(Angry84_intensity_Angry, na.rm = TRUE),
+         mAngry130 = mean(Angry130_intensity_Angry, na.rm = TRUE))
+angry_int
+```
+
+
+###The emotional intensity of happy animation
+```{r happy intensity}
+happy_int <- dat_int %>% select(Happy103_intensity_Happy, Happy338_intensity_Happy, Happy348_intensity_Happy) %>%
+  summarise(mhappy103 = mean(Happy103_intensity_Happy, na.rm = TRUE), 
+         mhappy338 = mean(Happy338_intensity_Happy, na.rm = TRUE),
+         mhappy348 = mean(Happy348_intensity_Happy, na.rm = TRUE))
+happy_int
+```
+
+
+###The emotional intensity of sad animation
+```{r sad intensity}
+sad_int <- dat_int %>% select(Sad59_intensity_Sad, Sad63_intensity_Sad, Sad134_intensity_Sad) %>%
+  summarise(msad103 = mean(Sad59_intensity_Sad, na.rm = TRUE), 
+         msad63 = mean(Sad63_intensity_Sad, na.rm = TRUE),
+         msad134 = mean(Sad134_intensity_Sad, na.rm = TRUE))
+sad_int
+```
 
